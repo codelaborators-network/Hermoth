@@ -1,15 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Core.Contracts;
+using Providers;
+using Providers.Twitter;
+using TweetSharp;
+using static System.Console;
 
 namespace Console
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static readonly ICredentialProvider TwitterCredentialProvider = new TwitterCredentialProvider();
+
+        private static readonly ISharableStrategy Strategy = new SharerStrategy(new ISharableFactory[]
+                {
+                    new TwitterSharerFactory(new TwitterService(), new TwitterCredentialProvider())
+                });
+
+        private static void Main(string[] args)
         {
+            var twitter = Strategy.Create(typeof(TwitterSharer));
+
+            twitter.Authenticate();
+            twitter.Share("This is a test tweet");
+
+            ReadLine();
         }
     }
 }
