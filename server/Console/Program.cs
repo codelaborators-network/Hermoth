@@ -1,4 +1,5 @@
-﻿using Core.Contracts;
+﻿using Core;
+using Core.Contracts;
 using Providers;
 using Providers.Twitter;
 using TweetSharp;

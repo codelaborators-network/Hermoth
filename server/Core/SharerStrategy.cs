@@ -1,9 +1,9 @@
-﻿using Core.Contracts;
-using Rework;
-using System;
+﻿using System;
 using System.Linq;
+using Core.Contracts;
+using Rework;
 
-namespace Providers
+namespace Core
 {
     public class SharerStrategy : ISharableStrategy
     {

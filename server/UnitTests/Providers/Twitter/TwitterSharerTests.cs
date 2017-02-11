@@ -37,5 +37,66 @@ namespace UnitTests.Providers.Twitter
                    () => new TwitterSharer(null, provider.Object));
             }
         }
+
+        [TestFixture]
+        public class Authenticate
+        {
+            [Test]
+            public void ShouldCallServiceAuthenticate()
+            {
+                var service = new Mock<ITwitterService>();
+                var provider = new Mock<ICredentialProvider>();
+                var sut = new TwitterSharer(service.Object, provider.Object);
+
+                sut.Authenticate();
+
+                service.Verify(
+                    (s) =>
+                        s.AuthenticateWith(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
+                            It.IsAny<string>()), Times.Once);
+            }
+
+            [Test]
+            public void ShouldGetTokenAndSecretsFromCredentialProvider()
+            {
+                var service = new Mock<ITwitterService>();
+                var provider = new Mock<ICredentialProvider>();
+                var sut = new TwitterSharer(service.Object, provider.Object);
+
+                sut.Authenticate();
+
+                provider.Verify(
+                    (p) =>
+                        p.GetToken(), Times.Once);
+                provider.Verify(
+                    (p) =>
+                        p.GetTokenSecret(), Times.Once);
+                provider.Verify(
+                    (p) =>
+                        p.GetConsumerKey(), Times.Once);
+                provider.Verify(
+                    (p) =>
+                        p.GetConsumerSecret(), Times.Once);
+            }
+
+            [Test]
+            public void ShouldPassAuthValuesInCorrectOrder()
+            {
+                var service = new Mock<ITwitterService>();
+                var provider = new Mock<ICredentialProvider>();
+                provider.Setup(p => p.GetConsumerKey()).Returns("CONSUMER_KEY");
+                provider.Setup(p => p.GetConsumerSecret()).Returns("CONSUMER_SECRET");
+                provider.Setup(p => p.GetToken()).Returns("TOKEN");
+                provider.Setup(p => p.GetTokenSecret()).Returns("TOKEN_SECRET");
+                var sut = new TwitterSharer(service.Object, provider.Object);
+
+                sut.Authenticate();
+
+                service.Verify(
+                    (s) =>
+                        s.AuthenticateWith("CONSUMER_KEY", "CONSUMER_SECRET", "TOKEN", "TOKEN_SECRET"),
+                    Times.Once);
+            }
+        }
     }
 }

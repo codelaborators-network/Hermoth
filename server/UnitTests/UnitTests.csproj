@@ -64,7 +64,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\SharerStrategyTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\Twitter\TwitterFactoryTests.cs" />
     <Compile Include="Providers\Twitter\TwitterSharerTests.cs" />
   </ItemGroup>
   <ItemGroup>

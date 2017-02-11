@@ -1,4 +1,5 @@
 ﻿using Core.Contracts;
+using Rework;
 using TweetSharp;
 
 namespace Providers.Twitter
@@ -10,6 +11,9 @@ namespace Providers.Twitter
 
         public TwitterSharer(ITwitterService service, ICredentialProvider credProvider)
         {
+            Require.NotNull(service);
+            Require.NotNull(credProvider);
+
             _service = service;
             _credProvider = credProvider;
         }
